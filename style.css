@@ -1,0 +1,17 @@
+body {
+  font-family: sans-serif;
+  text-align: center;
+  background: #111;
+  color: white;
+}
+
+.skill-box {
+  margin-top: 50px;
+}
+
+button {
+  font-size: 24px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+}
