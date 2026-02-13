@@ -1,40 +1,88 @@
-const skillData = [
-  { name: "攻撃", level: 0 },
-  { name: "見切り", level: 0 },
-  { name: "弱点特効", level: 0 }
+// ====== スキル目標 ======
+const targetSkills = [
+  { name: "攻撃", required: 2 },
+  { name: "見切り", required: 1 }
 ];
 
-function renderSkills() {
-  const container = document.getElementById("skills");
-  container.innerHTML = "";
-
-  skillData.forEach((skill, index) => {
-    const div = document.createElement("div");
-    div.innerHTML = `
-      <p>${skill.name} Lv ${skill.level}
-      <button onclick="increase(${index})">＋</button>
-      </p>
-    `;
-    container.appendChild(div);
-  });
-
-  renderResult();
-}
-
-function increase(index) {
-  skillData[index].level++;
-  renderSkills();
-}
-
-function renderResult() {
-  const result = document.getElementById("result");
-  result.innerHTML = "";
-
-  skillData.forEach(skill => {
-    if (skill.level > 0) {
-      result.innerHTML += `<p>${skill.name} Lv ${skill.level}</p>`;
+// ====== 防具データ（ミニ版） ======
+const armors = {
+  head: [
+    {
+      name: "カムラヘルム",
+      skills: { 攻撃: 1 }
+    },
+    {
+      name: "レウスヘルム",
+      skills: { 攻撃: 2 }
     }
+  ],
+  chest: [
+    {
+      name: "カムラメイル",
+      skills: { 見切り: 1 }
+    },
+    {
+      name: "ジンオウメイル",
+      skills: { 攻撃: 1 }
+    }
+  ]
+};
+
+// ====== 検索処理 ======
+function searchBuild() {
+  const results = [];
+
+  armors.head.forEach(head => {
+    armors.chest.forEach(chest => {
+
+      const totalSkills = {};
+
+      // 合算
+      [head, chest].forEach(part => {
+        for (let skill in part.skills) {
+          totalSkills[skill] = (totalSkills[skill] || 0) + part.skills[skill];
+        }
+      });
+
+      // 条件判定
+      let isValid = true;
+      targetSkills.forEach(target => {
+        if ((totalSkills[target.name] || 0) < target.required) {
+          isValid = false;
+        }
+      });
+
+      if (isValid) {
+        results.push({
+          head: head.name,
+          chest: chest.name,
+          skills: totalSkills
+        });
+      }
+    });
+  });
+
+  displayResults(results);
+}
+
+function displayResults(results) {
+  const resultDiv = document.getElementById("result");
+  resultDiv.innerHTML = "";
+
+  if (results.length === 0) {
+    resultDiv.innerHTML = "<p>条件を満たす構成がありません</p>";
+    return;
+  }
+
+  results.forEach(build => {
+    resultDiv.innerHTML += `
+      <hr>
+      <p>頭: ${build.head}</p>
+      <p>胴: ${build.chest}</p>
+      <p>スキル: ${JSON.stringify(build.skills)}</p>
+    `;
   });
 }
 
-renderSkills();
+// 初回実行
+searchBuild();
