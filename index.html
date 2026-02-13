@@ -11,9 +11,18 @@
 
   <h1>モンハンサンブレイク<br>スキルシミュレーター</h1>
 
-  <div id="skills"></div>
+  <h2>目標スキル設定</h2>
 
-  <h2>現在のスキル構成</h2>
+  <div>
+    攻撃 Lv <input type="number" id="atk" value="0" min="0">
+  </div>
+  <div>
+    見切り Lv <input type="number" id="crit" value="0" min="0">
+  </div>
+
+  <button onclick="searchBuild()">検索</button>
+
+  <h2>検索結果</h2>
   <div id="result"></div>
 
   <script src="app.js"></script>
