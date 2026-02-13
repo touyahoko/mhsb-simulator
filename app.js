@@ -12,9 +12,12 @@ const armors = {
 
 function searchBuild() {
 
+  const atkValue = parseInt(document.getElementById("atk").value) || 0;
+  const critValue = parseInt(document.getElementById("crit").value) || 0;
+
   const targetSkills = [
-    { name: "攻撃", required: parseInt(document.getElementById("atk").value) },
-    { name: "見切り", required: parseInt(document.getElementById("crit").value) }
+    { name: "攻撃", required: atkValue },
+    { name: "見切り", required: critValue }
   ];
 
   const results = [];
